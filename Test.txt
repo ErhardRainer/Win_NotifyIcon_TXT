@@ -1,0 +1,36 @@
+     private void trayIcon_MouseEnter(object sender, EventArgs e)
+        {
+            // Erstelle ein neues ContextMenuStrip
+            ContextMenuStrip menuStrip = new ContextMenuStrip();
+
+            // Erstelle ein ToolStripTextBox-Element, das den Inhalt der Textdatei anzeigt
+            ToolStripTextBox textBox = new ToolStripTextBox();
+            textBox.ReadOnly = true;
+            textBox.AutoSize = false;
+            textBox.Multiline = true;  // Multiline auf true setzen
+            textBox.Height = 800;
+            textBox.Width = 800;
+            textBox.Click += TextBox_Click;  // Hinzufügen des Click-Handlers
+            try
+            {
+                string content = File.ReadAllText("C:\\_OneDrive\\Erhard Rainer\\Computer - Programmierung\\Win_NotifyIcon_TXT\\Test.txt"); // den Pfad zur Datei anpassen
+                textBox.Text = content;
+            }
+            catch (Exception ex)
+            {
+                textBox.Text = "Fehler beim Lesen der Datei: " + ex.Message;
+            }
+
+            // Füge das ToolStripTextBox-Element zum ContextMenuStrip hinzu
+            menuStrip.Items.Add(textBox);
+
+            // Zeige das Flyout-Menü an
+            trayIcon.ContextMenuStrip = menuStrip;
+            trayIcon.ContextMenuStrip.Show(Control.MousePosition);
+        }
+
+        private void TextBox_Click(object sender, EventArgs e)
+        {
+            // Schließe das Flyout-Menü, wenn auf das TextBox-Element geklickt wird
+            trayIcon.ContextMenuStrip?.Close();
+        }
